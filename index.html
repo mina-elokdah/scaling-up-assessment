@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#104862">
+<title>تقييم النمط القيادي — Scaling Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #104862;
+  --white: #FFFFFF;
+  --orange: #F6A822;
+  --blue: #177CBD;
+  --brown: #946B35;
+  --green: #94C120;
+  --text-dark: #104862;
+  --text-muted: #6B7F8A;
+  --bg-light: #F4F7F9;
+  --line-light: #D8DEE3;
+  --shadow-sm: 0 2px 8px rgba(16, 72, 98, 0.08);
+  --shadow-md: 0 4px 16px rgba(16, 72, 98, 0.12);
+  --shadow-lg: 0 8px 32px rgba(16, 72, 98, 0.16);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: 'Cairo', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 48px;
+}
+
+/* Mandatory identity bar */
+.identity-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 12px;
+  display: flex;
+  direction: ltr; /* Force left-to-right so orange stays on left */
+  z-index: 100;
+}
+.identity-bar > div { flex: 1; }
+.identity-bar .s1 { background: var(--orange); }
+.identity-bar .s2 { background: var(--blue); }
+.identity-bar .s3 { background: var(--brown); }
+.identity-bar .s4 { background: var(--green); }
+
+/* Header */
+.header {
+  padding: 20px 20px 12px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line-light);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: var(--orange);
+  margin-top: 4px;
+}
+.logo-wrapper { display: inline-block; }
+
+/* Progress bar */
+.progress-wrapper {
+  display: none;
+  margin-top: 12px;
+}
+.progress-wrapper.active { display: block; }
+.progress-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.progress-bar {
+  height: 6px;
+  background: var(--bg-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--blue), var(--brown), var(--green));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Main container */
+.container {
+  flex: 1;
+  padding: 24px 20px 40px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Screen transitions */
+.screen { display: none; animation: fadeIn 0.4s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Welcome screen */
+.welcome-hero {
+  text-align: center;
+  padding: 40px 0 32px;
+}
+.welcome-badge {
+  display: inline-block;
+  background: var(--bg-light);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+.welcome-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+.welcome-subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 28px;
+}
+.welcome-description {
+  background: var(--bg-light);
+  border-right: 4px solid var(--orange);
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-dark);
+  margin-bottom: 28px;
+  text-align: right;
+}
+.welcome-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  padding: 16px 8px;
+  text-align: center;
+}
+.stat-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.stat-card.accent-1 .stat-number { color: var(--orange); }
+.stat-card.accent-2 .stat-number { color: var(--blue); }
+.stat-card.accent-3 .stat-number { color: var(--brown); }
+
+.name-input-wrapper {
+  margin-bottom: 24px;
+}
+.name-input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+.name-input {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  border: 2px solid var(--line-light);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--text-dark);
+  transition: all 0.2s;
+  text-align: right;
+}
+.name-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 72, 98, 0.1);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 52px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover, .btn-primary:active {
+  background: #0d3a50;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.btn-primary:disabled {
+  background: var(--line-light);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-secondary {
+  background: var(--bg-light);
+  color: var(--primary);
+  border: 1px solid var(--line-light);
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn-row .btn { flex: 1; }
+
+/* Case screen */
+.case-header {
+  margin-bottom: 20px;
+}
+.case-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--white);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.case-scenario {
+  background: var(--bg-light);
+  border-right: 4px solid var(--primary);
+  padding: 18px 18px 18px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+
+.instruction {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: #FFF8E7;
+  border-radius: 8px;
+  border-right: 3px solid var(--orange);
+}
+.instruction strong { color: var(--primary); }
+
+/* Option cards */
+.options-list { display: flex; flex-direction: column; gap: 12px; }
+
+.option-card {
+  background: var(--white);
+  border: 2px solid var(--line-light);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+.option-card.ranked { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+
+.option-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-dark);
+}
+.option-code {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Rank dropdown */
+.rank-select-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+}
+.rank-select {
+  width: 100%;
+  padding: 10px 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid var(--line-light);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--text-dark);
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7F8A'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: left 6px center;
+  background-size: 18px;
+  padding-left: 26px;
+}
+.rank-select:focus { outline: none; border-color: var(--primary); }
+.rank-select.filled { border-color: var(--primary); background-color: #F0F7FA; }
+
+/* Error message */
+.error-msg {
+  display: none;
+  background: #FEE4E2;
+  color: #B42318;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 16px;
+  border-right: 3px solid #B42318;
+}
+.error-msg.visible { display: block; }
+
+/* Results screen */
+.results-hero {
+  text-align: center;
+  padding: 20px 0 32px;
+  background: linear-gradient(135deg, var(--primary) 0%, #0d3a50 100%);
+  margin: -24px -20px 28px;
+  padding: 40px 20px;
+  color: var(--white);
+  border-radius: 0 0 24px 24px;
+  position: relative;
+}
+.results-hero::before {
+  content: 'SCALING UP';
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  opacity: 0.75;
+}
+.results-name {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+.results-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  opacity: 0.95;
+}
+.primary-style-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+.primary-style-name {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.primary-style-code {
+  font-size: 14px;
+  opacity: 0.8;
+  font-family: 'Cairo', sans-serif;
+  letter-spacing: 2px;
+}
+
+/* Section headers */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 28px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--line-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::before {
+  content: '';
+  width: 5px;
+  height: 22px;
+  background: var(--orange);
+  border-radius: 3px;
+}
+
+/* Bar chart */
+.style-chart { display: flex; flex-direction: column; gap: 14px; }
+.style-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.style-bar-label {
+  width: 70px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+}
+.style-bar-track {
+  flex: 1;
+  height: 28px;
+  background: var(--bg-light);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.style-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--white);
+  transition: width 1s ease-out;
+  white-space: nowrap;
+}
+.bar-s1 { background: var(--orange); }
+.bar-s2 { background: var(--blue); }
+.bar-s3 { background: var(--brown); }
+.bar-s4 { background: var(--green); }
+
+/* Metric cards */
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.metric-card {
+  background: var(--white);
+  border: 2px solid var(--line-light);
+  border-radius: 12px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.metric-value {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-sublabel {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.metric-card.flex { border-color: var(--blue); }
+.metric-card.flex .metric-value { color: var(--blue); }
+.metric-card.eff { border-color: var(--green); }
+.metric-card.eff .metric-value { color: var(--green); }
+
+/* Insight card */
+.insight-card {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--line-light);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.insight-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-light);
+}
+.insight-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.insight-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.insight-content {
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-dark);
+}
+.insight-content ul {
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.insight-content li { margin-bottom: 6px; }
+
+/* Print/Screenshot banner */
+.screenshot-tip {
+  background: #FFF8E7;
+  border: 1px solid var(--orange);
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-dark);
+  margin: 20px 0;
+  text-align: center;
+}
+.screenshot-tip strong { color: var(--primary); }
+
+.footer-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 20px 0;
+  border-top: 1px solid var(--line-light);
+  margin-top: 32px;
+}
+.footer-note strong { color: var(--primary); }
+
+/* Credit tag */
+.credit-tag {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 20px;
+  padding-bottom: 32px;
+}
+
+/* Responsive */
+@media (max-width: 380px) {
+  .welcome-title { font-size: 24px; }
+  .primary-style-name { font-size: 32px; }
+  .option-card { padding: 14px; gap: 10px; }
+  .option-text { font-size: 13px; }
+  .rank-select-wrapper { width: 68px; }
+  .metric-value { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-wrapper">
+    <div class="logo">SCALING UP</div>
+  </div>
+  <div class="progress-wrapper" id="progressWrapper">
+    <div class="progress-text">
+      <span id="progressText">الحالة 1 من 16</span>
+      <span id="progressPercent">6%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Welcome Screen -->
+  <div class="screen active" id="welcomeScreen">
+    <div class="welcome-hero">
+      <div class="welcome-badge">تقييم تفاعلي · Interactive Assessment</div>
+      <h1 class="welcome-title">تقييم النمط القيادي</h1>
+      <p class="welcome-subtitle">Leadership Style Self-Assessment</p>
+    </div>
+
+    <div class="welcome-description">
+      أداة تشخيصية علمية مبنية على نموذج <strong>القيادة الموقفية</strong> لـ Hersey &amp; Blanchard. من خلال تحليل استجاباتك لست عشرة حالة واقعية من بيئة العمل الحديثة، ستتعرف على نمطك القيادي السائد، ومدى مرونة أسلوبك، وفعاليته في التعامل مع مستويات التطور المختلفة لدى أعضاء فريقك.
+    </div>
+
+    <div class="welcome-stats">
+      <div class="stat-card accent-1">
+        <span class="stat-number">16</span>
+        <div class="stat-label">حالة</div>
+      </div>
+      <div class="stat-card accent-2">
+        <span class="stat-number">4</span>
+        <div class="stat-label">أنماط قيادية</div>
+      </div>
+      <div class="stat-card accent-3">
+        <span class="stat-number">12</span>
+        <div class="stat-label">دقيقة تقريبًا</div>
+      </div>
+    </div>
+
+    <div class="name-input-wrapper">
+      <label class="name-input-label" for="nameInput">اكتب اسمك ليظهر على شاشة النتيجة:</label>
+      <input type="text" id="nameInput" class="name-input" placeholder="مثال: أحمد محمد" maxlength="40">
+    </div>
+
+    <button class="btn btn-primary" onclick="startAssessment()">ابدأ التقييم ←</button>
+
+    <div class="credit-tag">
+      © Scaling Up Training · جميع الحقوق محفوظة
+    </div>
+  </div>
+
+  <!-- Case Screen -->
+  <div class="screen" id="caseScreen">
+    <div class="case-header">
+      <div class="case-scenario" id="caseScenario"></div>
+    </div>
+
+    <div class="instruction">
+      رتّب التصرفات الأربعة بوضع رقم بجانب كل تصرف: <strong>1</strong> للتصرف الأفضل من وجهة نظرك، و<strong>4</strong> للأقل ملاءمة. استخدم كل رقم مرة واحدة فقط.
+    </div>
+
+    <div class="options-list" id="optionsList"></div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="backBtn" onclick="previousCase()">→ السابق</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextCase()">التالي ←</button>
+    </div>
+  </div>
+
+  <!-- Results Screen -->
+  <div class="screen" id="resultsScreen">
+    <div class="results-hero">
+      <div class="results-name" id="resultsName">— النتيجة —</div>
+      <div class="primary-style-badge">نمطك القيادي السائد</div>
+      <div class="primary-style-name" id="primaryStyleName">—</div>
+      <div class="primary-style-code" id="primaryStyleCode">—</div>
+    </div>
+
+    <div class="section-title">توزيع الأنماط القيادية</div>
+    <div class="style-chart" id="styleChart"></div>
+
+    <div class="section-title">مؤشرات الأداء</div>
+    <div class="metric-grid">
+      <div class="metric-card flex">
+        <div class="metric-label">مرونة الأسلوب</div>
+        <div class="metric-value" id="flexValue">—</div>
+        <div class="metric-sublabel" id="flexLabel">—</div>
+      </div>
+      <div class="metric-card eff">
+        <div class="metric-label">فعالية الأسلوب</div>
+        <div class="metric-value" id="effValue">—</div>
+        <div class="metric-sublabel" id="effLabel">—</div>
+      </div>
+    </div>
+
+    <div class="section-title">تفسير النتيجة</div>
+    <div id="insightsContainer"></div>
+
+    <div class="screenshot-tip">
+      <strong>احفظ نتيجتك:</strong> خذ لقطة شاشة (screenshot) لحفظ النتيجة ومشاركتها مع مدرّبك.
+    </div>
+
+    <button class="btn btn-secondary" onclick="restart()" style="width:100%">إعادة التقييم من البداية</button>
+
+    <div class="footer-note">
+      <strong>Scaling Up</strong> · تقييم النمط القيادي<br>
+      مبني على نموذج Hersey &amp; Blanchard للقيادة الموقفية
+    </div>
+  </div>
+
+</div>
+
+<!-- Identity Bar -->
+<div class="identity-bar">
+  <div class="s1"></div>
+  <div class="s2"></div>
+  <div class="s3"></div>
+  <div class="s4"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA — 16 Modernized Cases
+// Each case has 4 options mapped to the 4 leadership styles:
+// S1 = توجيه (Directing)
+// S2 = تدريب (Coaching)
+// S3 = مساندة (Supporting) — [previously تشجيع in original]
+// S4 = تفويض (Delegating)
+//
+// correctRank[styleKey]: the ideal rank (1=best, 4=worst) for that style
+// in the given situation
+// ============================================================
+
+const CASES = [
+  {
+    id: 1,
+    scenario: "أنت تقود فريقًا من مهندسي البيانات ذوي الخبرة في شركة استشارات تقنية. وصل طلب مفاجئ من إدارتك بإنجاز مشروع تحليل سلوك مستخدمين لمنصة تجارة إلكترونية، وهو خارج نطاق تخصصكم التقني المعتاد، لكن فريقكم هو الأقدر عليه من أي فريق آخر في الشركة. أنت تعرف كفاءتهم، لكنك تتوقع قلقًا من مدى استعدادهم للمهمة بحماس.",
+    options: [
+      { code: "A", style: "S3", text: "تركّز على تحفيزهم والتأكيد على ثقتك بهم، وأنهم بخبرتهم السابقة قادرون على اكتشاف الطريقة المثلى لإنجاز هذه المهمة." },
+      { code: "B", style: "S1", text: "قبل أن تخبرهم بالمهمة، تُعدّ خطة تفصيلية لكل منهم تناسب قدراته، وتعطيها لهم بعد الشرح، ثم تتابع تفاصيل الأداء يوميًا." },
+      { code: "C", style: "S4", text: "لقد دربت فريقك بشكل كافٍ في الماضي، وصاروا فعّالين. آن الأوان لتثق بهم، تشرح المهمة، وتترك لهم حرية التصرف الكاملة." },
+      { code: "D", style: "S2", text: "تشرح لهم المهمة، تؤكد ثقتك بقدراتهم، تذكر النتائج الإيجابية للنجاح، ثم تعمل مع كل منهم على خطة تفصيلية مشتركة." }
+    ],
+    correctRank: { S1: 4, S2: 2, S3: 1, S4: 3 }
+  },
+  {
+    id: 2,
+    scenario: "تملك شركة ناشئة من ثلاثة مطورين (Startup). اثنان منهم اضطرا للسفر طارئًا لظروف عائلية لمدة أربعة أشهر، ولم تتمكن من توظيف بدلاء. المطور المتبقي - وهو كفء - أصبح يحمل حِمل ثلاثة. مع الأيام بدأت الضغوط تزداد، وبدأ يُبدي تذمّره ويفقد حماسه. ما أفضل طريقة للتعامل معه؟",
+    options: [
+      { code: "A", style: "S3", text: "تشجّعه، تؤكّد ثقتك به، تعطيه مكافأة استثنائية، تنصت لاحتياجاته، وتتركه يعمل بالطريقة التي يراها مناسبة." },
+      { code: "B", style: "S1", text: "تعقد معه جلسات متكررة لتحديد ماذا يفعل تحديدًا، والأولويات، وما يُؤجَّل، مع متابعة دقيقة أثناء التنفيذ." },
+      { code: "C", style: "S2", text: "تضع له خطة تفصيلية للمهام، وتشجعه على تنفيذها، وتكرّر تأكيد ثقتك به وتحفّزه باستمرار." },
+      { code: "D", style: "S4", text: "تتركه يتصرّف على راحته، فهو كفء وقادر، وكفاءته ستتغلّب على تذمّره مع الأيام." }
+    ],
+    correctRank: { S1: 4, S2: 2, S3: 1, S4: 3 }
+  },
+  {
+    id: 3,
+    scenario: "تمتلك شركة استشارات إدارية، ويعمل لديك فريق من الاستشاريين المتمكنين. لكل استشاري مساعد Junior تحت التدريب. انضم إليكم مؤخرًا خالد، مستشار شاب متميز، الأول على دفعته، وتدرّب لستة أشهر مع وليد (من أفضل استشارييك). جاء أول مشروع يقوده خالد بمفرده مع عميل استراتيجي. كيف تتعامل معه؟",
+    options: [
+      { code: "A", style: "S4", text: "دعه يكمل المشروع ولا تتدخل، فهو متحمس ومتميز وتدرّب مع أفضل استشاري لديك. سيأتي بابتكارات جديدة." },
+      { code: "B", style: "S2", text: "خالد متميز وعرف تفاصيل المشروع من البداية، لكنه جديد في القيادة. اعمل معه على خطة تفصيلية وقدّم له توجيهًا مع تشجيع مستمر." },
+      { code: "C", style: "S3", text: "رغم تميز خالد وحماسه، هو جديد. رتّب اجتماعًا يوميًا معه لمتابعة التفاصيل والتأكد من سير الأمور بشكل صحيح." },
+      { code: "D", style: "S1", text: "اطلب منه خطة تفصيلية، راجعها بندًا بندًا، عدّل ما يحتاج تعديلًا، واطلب منه تقريرًا يوميًا، فرغم تميزه لا زال يحتاج إحكامًا." }
+    ],
+    correctRank: { S1: 1, S2: 2, S3: 4, S4: 3 }
+  },
+  {
+    id: 4,
+    scenario: "استقالت سعاد من منصبها كمديرة تسويق رقمي، وتم ترقية هالة لتولّي المنصب. أدارت هالة حملة إطلاق المنتج الجديد الشهر الماضي، وكانت النتائج مخيّبة للآمال رغم ميزانيتها الضخمة. هالة تمر بإحباط واضح، وتشعر أنها ربما لم تكن مستعدة للمنصب. كيف تتصرف؟",
+    options: [
+      { code: "A", style: "S1", text: "هالة بحاجة لتدريب مكثّف وخطة مفصّلة ومتابعة يومية لأدائها، وتوجيهها لاتخاذ القرارات السليمة في المواقف المختلفة." },
+      { code: "B", style: "S2", text: "هالة جديدة على المنصب ومن الطبيعي أن تخطئ، فهي تحتاج إلى تدريب مع دعم نفسي وتشجيع لبناء ثقتها بنفسها تدريجيًا." },
+      { code: "C", style: "S3", text: "هالة تمتلك الكفاءة وإلا ما تم اختيارها، وفشلها الأول لا يعكس قدراتها. ركّز على دعمها عاطفيًا واستعادة ثقتها." },
+      { code: "D", style: "S4", text: "تجربة الفشل مُعلّمة. لأن هالة شخص ناضج، اتركها تتعلّم من أخطائها بنفسها، فهذا أقوى دروس القيادة." }
+    ],
+    correctRank: { S1: 2, S2: 1, S3: 3, S4: 4 }
+  },
+  {
+    id: 5,
+    scenario: "سهام محللة بيانات (Data Analyst) انضمّت إليكم مؤخرًا. في أول مشاركة في فريق العمل ارتكبت أخطاء واضحة في تقارير ذكاء الأعمال (BI) تدلّ على ضعف فني. وعندما ناقشتها بصياغة مهذّبة، ردّت بغضب مدافعةً عن نفسها ومتّهمةً فريقها بعدم مساعدتها. كيف تتصرّف؟",
+    options: [
+      { code: "A", style: "S4", text: "أنت قمت بدورك في تعليمها، وردّ فعلها يدل على عدم نضج. اتركها دون تدخّل، وعندما تفشل ستعود لطلب المساعدة." },
+      { code: "B", style: "S2", text: "اجلس معها في جلسة فردية، ادعم مهاراتها الفنية بتدريب مكثّف، ومع ذلك استمع لمشاعرها وشجّعها على بناء ثقتها." },
+      { code: "C", style: "S1", text: "المشكلة الرئيسية لديها نقص الكفاءة لأنها جديدة. رتّب لها اجتماعًا يوميًا لمتابعة أدائها خطوة بخطوة." },
+      { code: "D", style: "S3", text: "المشكلة الخفية أن سهام تنقصها الثقة، وتخفيها بالغضب. ركّز على دعمها عاطفيًا واستماعك لها لبناء ثقتها." }
+    ],
+    correctRank: { S1: 2, S2: 1, S3: 3, S4: 4 }
+  },
+  {
+    id: 6,
+    scenario: "لديك فريق من صانعي المحتوى (Content Creators) من جيل Z، اخترتهم لتميّزهم الأكاديمي ومبادراتهم الإبداعية في مشاريع التخرّج، وحماسهم الشديد للإعلام الرقمي. نجحوا في خمسة حملات سابقة، والآن سيديرون حملة إعلامية ضخمة لأكبر عميل في الشركة بميزانية ستة أرقام.",
+    options: [
+      { code: "A", style: "S3", text: "فريقك صار خبيرًا ومميزًا، اشرح لهم المشروع واترك لهم إدارته، فهم شباب مبدعون سيأتون بأفكار غير متوقعة." },
+      { code: "B", style: "S2", text: "اطلب منهم إعداد خطة تفصيلية بأنفسهم، اجلس معهم وناقشها بدقة، فرغم خبرتهم هذا أكبر مشروع يقودونه وحدهم." },
+      { code: "C", style: "S4", text: "آن الأوان لتثق بكفاءتهم وإبداعهم. فوّضهم بالكامل ولا تتدخّل في تفاصيل عملهم، حتى تشجيعك قد يبدو تدخّلًا." },
+      { code: "D", style: "S1", text: "هم لا ينقصهم الحماس، لكن نجاحهم في خمسة مشاريع لا يكفي لمشروع بهذا الحجم. ترأّس الفريق بشكل مباشر وتولَّ التفاصيل." }
+    ],
+    correctRank: { S1: 4, S2: 2, S3: 3, S4: 1 }
+  },
+  {
+    id: 7,
+    scenario: "سعيد مبرمج Junior انضم حديثًا لفريق التطوير، متحمس ويشعر أنه متميز وقادر، لكنه قليل الخبرة فعلًا. رتّبت له دورات مكثفة في React و TypeScript (ودفعت ثمنها)، لكنه فاجأك بطلب إعفائه منها قائلًا: 'أنا شاطر كفاية، وأقدر أعلّم نفسي بسرعة'.",
+    options: [
+      { code: "A", style: "S1", text: "لا تقبل منه ذلك. رغم حماسه هو بحاجة للتدريب، ولا يعرف القيمة الحقيقية للدورات. ألزمه بحضورها وتابع تقدّمه." },
+      { code: "B", style: "S4", text: "اقبل عرضه وأعفه من الدورات، ودعه يجرّب بنفسه. لعلّه يكون محقًا، وحتى لو أخطأ سيتعلّم من تجربته." },
+      { code: "C", style: "S3", text: "سعيد جديد وعدم ثقته بنفسه مُخبّأة خلف مظهر الحماس. لا تنخدع بذلك، وركّز على تشجيعه ورفع ثقته." },
+      { code: "D", style: "S2", text: "سعيد متحمس لكن ينقصه التدريب المكثف والتشجيع. ألزمه بالحضور مع متابعة أدائه وتقديم الدعم المستمر." }
+    ],
+    correctRank: { S1: 1, S2: 2, S3: 4, S4: 3 }
+  },
+  {
+    id: 8,
+    scenario: "تعقد يوميًا اجتماعًا قصيرًا (Daily Standup) عن بُعد مع فريق العمل الهجين (Hybrid Team) لتحديد المهام والتحفيز. لاحظت مؤخرًا أن مجموعة من الموظفين يؤدّون مهامهم بامتياز، بينما تحتاج مجموعة أخرى لتوجيه مستمر. هل تفصل بين المجموعتين في الاجتماعات؟",
+    options: [
+      { code: "A", style: "S1", text: "لا تفصل بين المجموعتين، فهذا سيؤدي لمشاكل غير منظورة، والمجموعة الممتازة قد تحتاج توجيهًا في مواقف معيّنة." },
+      { code: "B", style: "S2", text: "لا تفصلهم، لكن أضف جرعة تدريبية أكبر في الاجتماع بحيث يستفيد الجميع بدرجات متفاوتة دون إهمال أحد." },
+      { code: "C", style: "S4", text: "قسّم فريقك إلى مجموعتين، فوّض المجموعة الممتازة واستمر بلقاءات تفصيلية مع الأخرى، وانقل من يتميّز تدريجيًا." },
+      { code: "D", style: "S3", text: "لا تقسّمهم، بل اطلب أن يحدّد كل شخص مهامه بنفسه، وشجّع المجموعة العادية للاستفادة من أفكار المتميّزين." }
+    ],
+    correctRank: { S1: 2, S2: 4, S3: 3, S4: 1 }
+  },
+  {
+    id: 9,
+    scenario: "حسن موظف CRM متوسط الأداء والحماس، مطلوب منه - كباقي الفريق - تسليم تقرير أسبوعي عن أدائه. كان يسلّمه في الوقت على Excel القديم. تم تحويل النظام مؤخرًا لمنصة CRM سحابية جديدة، ومنذ ذلك الحين يتأخر حسن في التسليم ويعطي أعذارًا متنوعة.",
+    options: [
+      { code: "A", style: "S4", text: "اصبر لمدة شهر ولا تتدخّل، فسيشعر بتقصيره ويتعلّم استخدام النظام الجديد وحده، وهذا أقوى أثرًا من التوجيه." },
+      { code: "B", style: "S3", text: "اجتمع معه وبيّن ثقتك به وبقدراته، وشجّعه على تقديم التقرير، وأخبره أن النظام الجديد لا يختلف كثيرًا عن القديم." },
+      { code: "C", style: "S2", text: "اعقد اجتماعًا واملأ النموذج معه خطوة بخطوة، وشجّعه على طرح الأسئلة في النواحي التقنية، فأنت أقدر منه عليها." },
+      { code: "D", style: "S1", text: "المشكلة بدأت مع النظام الإلكتروني، فحسن يعاني من التقنية. رتّب له جلسة مفصّلة تدرّبه فيها على كل خطوات النظام." }
+    ],
+    correctRank: { S1: 2, S2: 1, S3: 3, S4: 4 }
+  },
+  {
+    id: 10,
+    scenario: "تمّ تعيينك رئيسًا تنفيذيًا (CEO) جديدًا لشركة تقنية للأمن السيبراني (Cybersecurity) تخدم عملاء حكوميين حساسين. الشركة سمعتها ممتازة وأداؤها جيد، والفريق الفني خبير ومستقل ومبدع. أنت كفء ومبتكر ولديك أفكار تطويرية طموحة. كيف تقدّم أفكارك؟",
+    options: [
+      { code: "A", style: "S3", text: "اشرح أفكارك بحماس، شجّعهم على تبنّيها، وعِد بمكافآت مجزية، واستمع لردود أفعالهم بانصات حقيقي ورحّب بكل نقد." },
+      { code: "B", style: "S2", text: "اجتمع معهم، اشرح أفكارك، وضع معًا خطة تحويل الأفكار لواقع. شجّعهم، حفّزهم، وقدّم الدعم الفني المستمر." },
+      { code: "C", style: "S4", text: "اشرح أفكارك وأهدافك، ثم دعهم يدرسونها ويقرّرون مدى ملاءمتها وكيفية تطبيقها، فهم فريق متميّز وناضج." },
+      { code: "D", style: "S1", text: "هم لا يعرفونك ولا يعرفون كفاءتك بعد. ترأس الفريق بشكل مباشر، اشرح أفكارك بالتفصيل، ووضّح الأدلة العملية عليها." }
+    ],
+    correctRank: { S1: 3, S2: 4, S3: 2, S4: 1 }
+  },
+  {
+    id: 11,
+    scenario: "أحمد المدير الجديد لمدرسة دولية، متحمس جدًا وشغوف بعمله. واجه مشكلة في التعامل مع نظام ERP مدرسي جديد يرتّب جداول الحصص والمدرسين والمواد تلقائيًا. رغم أنه متقن لعمله الإداري، إلا أنه بدأ يتجنب استخدام النظام ويعود للجداول اليدوية القديمة.",
+    options: [
+      { code: "A", style: "S1", text: "أحمد لا ينقصه الحماس، لكن لديه مشكلة تقنية واضحة. اجلس معه، استعرض النظام خطوة بخطوة، ودرّبه على كل استخداماته." },
+      { code: "B", style: "S4", text: "المهم النتائج. بما أن أحمد يُنجز العمل دون أخطاء - حتى لو بالطرق القديمة - اتركه يقرّر بنفسه الوقت المناسب للتحوّل." },
+      { code: "C", style: "S3", text: "أحمد كفء لكن ينقصه الثقة عند التعامل مع التقنيات الجديدة. ما يحتاجه هو جرعة تحفيز وتشجيع لا تدريب تقني." },
+      { code: "D", style: "S2", text: "اجلس مع أحمد أمام النظام، واطلب منه السير بخطواته أمامك خطوة بخطوة، وشجّعه عند كل خطأ على المحاولة مجددًا." }
+    ],
+    correctRank: { S1: 1, S2: 2, S3: 4, S4: 3 }
+  },
+  {
+    id: 12,
+    scenario: "في فريقك موظف رائع صاحب كفاءة عالية وأخلاق مميزة وحماس مرتفع، بسبب هذه الصفات بدأ نجمه يلمع بشكل لافت، ويحظى بإعجاب الفريق، بدرجة جعلته يمارس دورك أحيانًا في الاجتماعات دون قصد. كيف تتعامل معه؟",
+    options: [
+      { code: "A", style: "S1", text: "اطلب جلسة مصارحة معه، كن واضحًا بأنك تقدّره لكن لا يمكن للسفينة أن يكون لها أكثر من قبطان، واتفق معه على الحدود." },
+      { code: "B", style: "S4", text: "أن يكون لديك موظف بهذه الصفات فهذا أمر رائع، وهو قيادة مستقبلية ممتازة. دعه يستمر وشجّع الفريق للاستفادة منه." },
+      { code: "C", style: "S2", text: "اجلس معه جلسة مصارحة، اتفق معه ألّا يمارس دورك، وضع خطة تفصيلية لما هو مطلوب منه، على أن يكون جزءًا من الخطة دعمًا لك." },
+      { code: "D", style: "S3", text: "هذا الموظف صاحب كفاءة، فليكن دورك تشجيعه والحديث معه عن طموحاته المستقبلية وأفكاره الإبداعية وزيادة ثقته بنفسه." }
+    ],
+    correctRank: { S1: 3, S2: 4, S3: 2, S4: 1 }
+  },
+  {
+    id: 13,
+    scenario: "أدخلت الشركة نظام ذكاء اصطناعي جديد (AI Enterprise Platform) يحوّل كل عمليات الإدارة. البرنامج قوي لكن صعب في إتقانه ويحتاج تدريبًا مكثّفًا. جاءك موظف متحمس من الفريق وقال: 'ثق بي، سأتعلّمه بنفسي من YouTube والدورات المجانية، لا داعي لاستثمار الشركة في تدريبي'.",
+    options: [
+      { code: "A", style: "S4", text: "دعه يفعل، ولا تثبّطه. لو رفضت طلبه سترسل له رسالة أنك لا تثق بمبادراته. سيتعلّم إمّا بنفسه وإمّا من تجربته." },
+      { code: "B", style: "S1", text: "لا تقبل منه ذلك، فالبرنامج صعب والحماس وحده غير كافٍ. رتّب له دورة مكثّفة رسمية يقدّمها له خبراء الشركة المُصنِّعة." },
+      { code: "C", style: "S3", text: "اقبل عرضه وشجّعه وبيّن ثقتك به الكاملة، بل أعلن عن مكافأة إذا أتقن البرنامج بمفرده، فالثقة ستُخرج أفضل ما عنده." },
+      { code: "D", style: "S2", text: "رتّب له دورة مكثّفة لدى الشركة المُزوِّدة للبرنامج، قم بزيارته أثناء التدريب لمتابعة تقدّمه وتشجيعه واختبار استيعابه." }
+    ],
+    correctRank: { S1: 1, S2: 2, S3: 3, S4: 4 }
+  },
+  {
+    id: 14,
+    scenario: "في فريق دعم العملاء (Customer Support) الذي تديره، تم إدخال أداة ذكاء اصطناعي جديدة (AI Chatbot) يمكنها تحسين سرعة الرد بنسبة 30% سنويًا. رغم تدريب الفريق الأوّلي، يشتكي الفريق من تعقيد الأداة ويطلبون العودة للطريقة التقليدية في الرد اليدوي.",
+    options: [
+      { code: "A", style: "S2", text: "أصرّ على الأداة الجديدة، ورتّب تدريبًا مكثفًا على يد خبير من الشركة المُطوّرة، وركّز في الأسابيع الأولى على الدعم المستمر معهم." },
+      { code: "B", style: "S4", text: "إصرارك على الأداة الجديدة سيُضعف الروح المعنوية، وهي الأهم. اتركهم يقرّرون متى يتحوّلون تدريجيًا بإيقاعهم." },
+      { code: "C", style: "S1", text: "لا تقبل منهم العودة للنظام القديم. ألزمهم باستخدام الأداة الجديدة، واطلب خبيرًا من الشركة المُطوّرة ليدرّبهم بشكل مكثف." },
+      { code: "D", style: "S3", text: "مشكلتهم هي نقص الثقة. شجّعهم على استخدام الأداة، وأعلن عن مسابقة ومكافآت مجزية للموظف الذي يحقق أفضل استخدام لها." }
+    ],
+    correctRank: { S1: 2, S2: 1, S3: 3, S4: 4 }
+  },
+  {
+    id: 15,
+    scenario: "تدير منظمة خيرية غير ربحية (NGO) لرعاية شباب اللاجئين، يعمل فيها فريق من ذوي الخبرة والكفاءة العالية، وأداؤهم كان مميزًا لسنوات. لكن مع زيادة التبرعات والتوقّعات، نشأت خلافات شخصية بين أعضاء الفريق، وبدأ أداء المنظمة يتراجع ملحوظًا. كيف تتصرف؟",
+    options: [
+      { code: "A", style: "S2", text: "رتّب جلسات استماع فردية وجماعية للاتفاق على معايير إنجاز صارمة، وخطة عمل تفصيلية لكل منهم مع تقارير أداء دورية." },
+      { code: "B", style: "S1", text: "لا يمكن للخلافات الشخصية أن تؤثّر على الشباب الذين يعتمدون عليكم. كن حاسمًا في تحديد المهام والأولويات والمواعيد النهائية." },
+      { code: "C", style: "S3", text: "هذا الفريق لا تنقصه الكفاءة، ونتائجه السابقة تدلّ على ذلك. رتّب جلسات استماع فردية وجماعية واستخدم فيها الإنصات النشط لحل الخلافات." },
+      { code: "D", style: "S4", text: "اجتمع مع الفريق، استعرض معهم نتائجكم السابقة وكيف حقّقتموها بكفاءتكم وحماسكم، ثم بيّن التراجع ودعهم يجدون الحل بأنفسهم." }
+    ],
+    correctRank: { S1: 4, S2: 2, S3: 1, S4: 3 }
+  },
+  {
+    id: 16,
+    scenario: "انتقلت كوثر من فرع الشركة في الإسكندرية إلى فرع القاهرة الذي معظم موظفيه نساء. خلال الشهر الأول من عملها، لاحظتِ أن كوثر فهمت العمل والإجراءات بسرعة، وأداؤها الفردي ممتاز جدًا، لكنها تعمل بشكل منعزل تمامًا ولم تندمج مع زميلاتها في أي عمل جماعي.",
+    options: [
+      { code: "A", style: "S1", text: "شكّل فريقًا من خمس موظفات إحداهن كوثر، وأعطِهم مهامًا محدّدة وأهدافًا واضحة لا يمكن تحقيقها إلا بالعمل الجماعي." },
+      { code: "B", style: "S2", text: "اجتمع مع كوثر وشجّعها لتبيّن سبب عدم اندماجها، استمع لها بانصات لفهم ما وراء المشكلة من أسباب نفسية أو اجتماعية." },
+      { code: "C", style: "S3", text: "اجتمع مع كوثر، بيّن لها ملاحظاتك، استمع لها بانصات، وشجّعها على إبداء ما في نفسها، وذلّل العقبات بينها وبين زميلاتها." },
+      { code: "D", style: "S4", text: "لا تتدخّل، فالعلاقات تأخذ وقتًا. لمّا كانت المشكلة غير موجودة سابقًا، فهي ليست من طبيعة كوثر، بل ظرف مؤقت سيحل نفسه." }
+    ],
+    correctRank: { S1: 4, S2: 2, S3: 1, S4: 3 }
+  }
+];
+
+const STYLES = {
+  S1: { name: "التوجيه", nameEn: "Directing", color: "#F6A822", cssClass: "bar-s1" },
+  S2: { name: "التدريب", nameEn: "Coaching",  color: "#177CBD", cssClass: "bar-s2" },
+  S3: { name: "المساندة", nameEn: "Supporting", color: "#946B35", cssClass: "bar-s3" },
+  S4: { name: "التفويض", nameEn: "Delegating", color: "#94C120", cssClass: "bar-s4" }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  userName: "",
+  currentCase: 0,
+  responses: Array(16).fill(null).map(() => ({ A: null, B: null, C: null, D: null }))
+};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startAssessment() {
+  const name = document.getElementById('nameInput').value.trim();
+  state.userName = name || 'المتدرب';
+  state.currentCase = 0;
+  document.getElementById('progressWrapper').classList.add('active');
+  showScreen('caseScreen');
+  renderCase();
+}
+
+function renderCase() {
+  const idx = state.currentCase;
+  const caseData = CASES[idx];
+  const progress = ((idx + 1) / 16) * 100;
+
+  document.getElementById('progressFill').style.width = progress + '%';
+  document.getElementById('progressText').textContent = `الحالة ${idx + 1} من 16`;
+  document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+
+  document.getElementById('caseScenario').textContent = caseData.scenario;
+
+  const listEl = document.getElementById('optionsList');
+  listEl.innerHTML = '';
+
+  caseData.options.forEach(opt => {
+    const currentRank = state.responses[idx][opt.code];
+    const card = document.createElement('div');
+    card.className = 'option-card' + (currentRank ? ' ranked' : '');
+    card.innerHTML = `
+      <div class="option-text">
+        <span class="option-code">${caseData.id}${opt.code}</span>
+        ${opt.text}
+      </div>
+      <div class="rank-select-wrapper">
+        <select class="rank-select ${currentRank ? 'filled' : ''}" data-opt="${opt.code}" onchange="handleRankChange(event)">
+          <option value="">—</option>
+          <option value="1" ${currentRank === 1 ? 'selected' : ''}>1</option>
+          <option value="2" ${currentRank === 2 ? 'selected' : ''}>2</option>
+          <option value="3" ${currentRank === 3 ? 'selected' : ''}>3</option>
+          <option value="4" ${currentRank === 4 ? 'selected' : ''}>4</option>
+        </select>
+      </div>
+    `;
+    listEl.appendChild(card);
+  });
+
+  document.getElementById('errorMsg').classList.remove('visible');
+  document.getElementById('backBtn').disabled = (idx === 0);
+  document.getElementById('backBtn').style.visibility = idx === 0 ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').textContent = idx === 15 ? 'عرض النتيجة ←' : 'التالي ←';
+}
+
+function handleRankChange(e) {
+  const select = e.target;
+  const optCode = select.dataset.opt;
+  const val = select.value ? parseInt(select.value) : null;
+  state.responses[state.currentCase][optCode] = val;
+
+  const card = select.closest('.option-card');
+  if (val) {
+    card.classList.add('ranked');
+    select.classList.add('filled');
+  } else {
+    card.classList.remove('ranked');
+    select.classList.remove('filled');
+  }
+}
+
+function validateCase() {
+  const resp = state.responses[state.currentCase];
+  const values = Object.values(resp).filter(v => v !== null);
+  const errorEl = document.getElementById('errorMsg');
+
+  if (values.length < 4) {
+    errorEl.textContent = '⚠️ يجب ترتيب جميع التصرفات الأربعة قبل الانتقال.';
+    errorEl.classList.add('visible');
+    return false;
+  }
+
+  const uniqueValues = new Set(values);
+  if (uniqueValues.size < 4) {
+    errorEl.textContent = '⚠️ كل رقم (1، 2، 3، 4) يُستخدم مرة واحدة فقط — راجع الترتيب.';
+    errorEl.classList.add('visible');
+    return false;
+  }
+
+  errorEl.classList.remove('visible');
+  return true;
+}
+
+function nextCase() {
+  if (!validateCase()) return;
+
+  if (state.currentCase < 15) {
+    state.currentCase++;
+    renderCase();
+  } else {
+    showResults();
+  }
+}
+
+function previousCase() {
+  if (state.currentCase > 0) {
+    state.currentCase--;
+    renderCase();
+  }
+}
+
+// ============================================================
+// SCORING
+// ============================================================
+function calculateResults() {
+  // For each style, count how often the user's rank matched the correct rank
+  // Also compute: primary style, flexibility, effectiveness
+  const styleScores = { S1: 0, S2: 0, S3: 0, S4: 0 };
+  const primaryChoices = { S1: 0, S2: 0, S3: 0, S4: 0 };
+  let effectivenessPoints = 0;
+
+  state.responses.forEach((resp, i) => {
+    const caseData = CASES[i];
+    caseData.options.forEach(opt => {
+      const userRank = resp[opt.code];
+      const correctRank = caseData.correctRank[opt.style];
+
+      // Score: closer to correct rank = higher score (max 4)
+      // If user ranked 1 and correct is 1 → 4 points
+      // If user ranked 4 and correct is 1 → 1 point
+      const diff = Math.abs(userRank - correctRank);
+      const points = 4 - diff;
+      styleScores[opt.style] += points;
+
+      // Track the user's #1 pick for each case
+      if (userRank === 1) {
+        primaryChoices[opt.style]++;
+        // Effectiveness: did user's top pick match the optimal style?
+        if (correctRank === 1) {
+          effectivenessPoints++;
+        }
+      }
+    });
+  });
+
+  // Find primary style by count of #1 picks
+  let primaryStyle = 'S1';
+  let maxCount = primaryChoices.S1;
+  ['S2', 'S3', 'S4'].forEach(s => {
+    if (primaryChoices[s] > maxCount) {
+      primaryStyle = s;
+      maxCount = primaryChoices[s];
+    }
+  });
+
+  // Flexibility: standard deviation of primary choices (lower = less flexible)
+  // Simple measure: how evenly distributed are primary choices?
+  const counts = Object.values(primaryChoices);
+  const mean = 16 / 4; // 4
+  const variance = counts.reduce((sum, c) => sum + Math.pow(c - mean, 2), 0) / 4;
+  const stdDev = Math.sqrt(variance);
+  // stdDev=0 means perfectly balanced. stdDev of 16,0,0,0 pattern = ~6.9
+  const flexPercent = Math.max(0, Math.round((1 - stdDev / 6.9) * 100));
+
+  // Effectiveness percentage
+  const effPercent = Math.round((effectivenessPoints / 16) * 100);
+
+  return {
+    primaryStyle,
+    styleScores,
+    primaryChoices,
+    flexPercent,
+    effPercent,
+    effectivenessCount: effectivenessPoints
+  };
+}
+
+function showResults() {
+  const results = calculateResults();
+
+  document.getElementById('progressWrapper').classList.remove('active');
+  document.getElementById('resultsName').textContent = state.userName;
+
+  const primary = STYLES[results.primaryStyle];
+  document.getElementById('primaryStyleName').textContent = primary.name;
+  document.getElementById('primaryStyleCode').textContent = `${results.primaryStyle} — ${primary.nameEn}`;
+
+  // Render style chart
+  const maxScore = Math.max(...Object.values(results.styleScores));
+  const chartEl = document.getElementById('styleChart');
+  chartEl.innerHTML = '';
+  ['S1', 'S2', 'S3', 'S4'].forEach(s => {
+    const score = results.styleScores[s];
+    const picks = results.primaryChoices[s];
+    const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
+    const row = document.createElement('div');
+    row.className = 'style-bar-row';
+    row.innerHTML = `
+      <div class="style-bar-label">${STYLES[s].name}</div>
+      <div class="style-bar-track">
+        <div class="style-bar-fill ${STYLES[s].cssClass}" style="width:0%">
+          ${score} نقطة · ${picks} مرة
+        </div>
+      </div>
+    `;
+    chartEl.appendChild(row);
+    // Animate after short delay
+    setTimeout(() => {
+      row.querySelector('.style-bar-fill').style.width = pct + '%';
+    }, 100);
+  });
+
+  // Flex & Effectiveness
+  document.getElementById('flexValue').textContent = results.flexPercent + '%';
+  document.getElementById('flexLabel').textContent =
+    results.flexPercent >= 70 ? 'مرونة عالية — تتنوّع بين الأنماط' :
+    results.flexPercent >= 40 ? 'مرونة متوسطة' :
+    'مرونة محدودة — تعتمد على نمط واحد';
+
+  document.getElementById('effValue').textContent = results.effPercent + '%';
+  document.getElementById('effLabel').textContent =
+    `${results.effectivenessCount} من 16 موقفًا طابقت الأسلوب الأمثل`;
+
+  // Insights
+  renderInsights(results);
+
+  showScreen('resultsScreen');
+}
+
+function renderInsights(results) {
+  const container = document.getElementById('insightsContainer');
+  const primary = STYLES[results.primaryStyle];
+
+  const descriptions = {
+    S1: {
+      strength: "تبرع في المواقف التي تحتاج قرارًا حاسمًا وتوجيهًا مباشرًا، وتُعدّ مثاليًا للتعامل مع الموظفين الجدد أو المبتدئين الذين يحتاجون إرشادًا واضحًا.",
+      watchout: "احذر من استخدام هذا النمط مع المحترفين أصحاب الخبرة، فقد يشعرون بعدم الثقة أو التقييد، مما يؤدي إلى فقدان دافعيتهم.",
+      develop: "طوّر مهارات الإنصات والتفويض، وتدرّب على طرح الأسئلة المفتوحة قبل إعطاء الحلول."
+    },
+    S2: {
+      strength: "تمتلك القدرة على الموازنة بين التوجيه الفني والدعم العاطفي، وأنت مثالي لتطوير الموظفين الذين فقدوا حماسهم بعد تعثّر أولي.",
+      watchout: "قد يُرهقك هذا النمط لكثرة جهده المطلوب. كما أن استخدامه مع من لا يحتاجه قد يشعرهم بأنك مبالغ في الاهتمام.",
+      develop: "تدرّب على التمييز السريع بين من يحتاج توجيهًا فنيًا ومن يحتاج دعمًا عاطفيًا فقط."
+    },
+    S3: {
+      strength: "تتميّز بمهارات الإنصات والاستماع، وأنت مثالي للتعامل مع أصحاب الكفاءة الذين ينقصهم الحماس أو الثقة بأنفسهم.",
+      watchout: "قد تفرط في الدعم العاطفي وتُهمل التوجيه الفني اللازم مع المبتدئين، مما يؤدي إلى أداء ضعيف رغم العلاقات الممتازة.",
+      develop: "تعلّم أن الدعم العاطفي وحده لا يكفي في بعض المواقف، وأن التوجيه الحازم قد يكون أكثر عطاءً للموظف."
+    },
+    S4: {
+      strength: "تثق بفريقك وتمنحهم الاستقلالية، مما يُخرج أفضل ما في الموظفين الناضجين المحترفين، ويُنمّي فيهم حسّ الملكية.",
+      watchout: "قد يتحوّل نمطك إلى إهمال مُقنّع بالثقة مع الموظفين الجدد، مما يُعرّضهم للفشل وفقدان الثقة بأنفسهم.",
+      develop: "تدرّب على تشخيص مستوى نضج الموظف بدقة قبل التفويض، وتعلّم التفرقة بين الثقة المُستحقّة والإهمال."
+    }
+  };
+
+  const desc = descriptions[results.primaryStyle];
+
+  container.innerHTML = `
+    <div class="insight-card">
+      <div class="insight-card-header">
+        <div class="insight-icon" style="background:${primary.color}">✓</div>
+        <div class="insight-title">نقاط القوة في نمطك</div>
+      </div>
+      <div class="insight-content">${desc.strength}</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-card-header">
+        <div class="insight-icon" style="background:#F04438">!</div>
+        <div class="insight-title">نقاط الحذر</div>
+      </div>
+      <div class="insight-content">${desc.watchout}</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-card-header">
+        <div class="insight-icon" style="background:var(--primary)">→</div>
+        <div class="insight-title">توصيات التطوير</div>
+      </div>
+      <div class="insight-content">${desc.develop}</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-card-header">
+        <div class="insight-icon" style="background:${primary.color}">⚑</div>
+        <div class="insight-title">تذكير ذهبي</div>
+      </div>
+      <div class="insight-content">
+        <strong>القيادة الفعّالة ليست نمطًا واحدًا</strong>، بل هي القدرة على التبديل بين الأنماط الأربعة حسب مستوى تطوّر كل فرد في فريقك ولكل مهمة على حدة. النضج القيادي مرتبط بالمهمة، لا بالشخص.
+      </div>
+    </div>
+  `;
+}
+
+function restart() {
+  state = {
+    userName: "",
+    currentCase: 0,
+    responses: Array(16).fill(null).map(() => ({ A: null, B: null, C: null, D: null }))
+  };
+  document.getElementById('nameInput').value = '';
+  document.getElementById('progressWrapper').classList.remove('active');
+  showScreen('welcomeScreen');
+}
+</script>
+
+</body>
+</html>
